@@ -1,4 +1,4 @@
-export const PORT = process.env.PORT || 4000;
+export const PORT = process.env.PORT || 5000;
 export const HTTP_STATUS = {
   OK: 200,
   CREATED: 201,

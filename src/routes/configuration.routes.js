@@ -12,11 +12,12 @@ import {
   getSucursalForCompany,
   insertSucursal,
 } from "../controller/sucursal.controller.js";
-import { insertUser } from "../controller/user.controller.js";
+import { insertUser, getUsers } from "../controller/user.controller.js";
 
 const router = Router();
 
 // Usuario
+router.get("/users/:company", getUsers);
 router.post("/users", insertUser); //usuario
 
 // Empresa

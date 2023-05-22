@@ -1,4 +1,5 @@
 import User from "../model/User.js";
+import { passwordEncrypt } from "../helpers/auth.js";
 import { HTTP_STATUS } from "../config/configuration.js";
 
 export const insertUser = async (req, res) => {
@@ -13,6 +14,7 @@ export const insertUser = async (req, res) => {
     idCompany,
     rol,
   } = req.body;
+  
 
   if (
     !document ||
@@ -31,15 +33,21 @@ export const insertUser = async (req, res) => {
     });
   }
 
+  const nameUpper = name.toUpperCase();
+  const lastnamepUpper = lastnamep.toUpperCase();
+  const lastnamemUpper = lastnamem.toUpperCase();
+  const rolUpper = rol.toUpperCase();
+
   try {
+    const passwordGenerate = await passwordEncrypt(req.body.password);
     const UserData = User({
       document,
-      name,
-      lastnamep,
-      lastnamem,
+      name: nameUpper,
+      lastnamep: lastnamepUpper,
+      lastnamem: lastnamemUpper,
       username,
-      password,
-      rol,
+      password: passwordGenerate,
+      rol: rolUpper,
       idSucursal,
       idCompany,
     });
@@ -57,3 +65,11 @@ export const insertUser = async (req, res) => {
   }
 };
 
+export const getUsers = async (req, res) => {
+  try {
+    const data = await User.find({ idCompany: req.params.company });
+    res.status(HTTP_STATUS.OK).json(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
