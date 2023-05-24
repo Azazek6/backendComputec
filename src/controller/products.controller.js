@@ -1,9 +1,10 @@
+import axios from "axios";
 import Products from "../model/Products.js";
-import { HTTP_STATUS } from "../config/configuration.js";
+import { HTTP_STATUS, urlServer } from "../config/configuration.js";
 
 //Traer todos los productos
 export const getProducts = async (req, res) => {
-  const data = await Products.find({ idCompany: req.params.company });
+  const data = await Products.find();
   res.status(HTTP_STATUS.OK).json(data);
 };
 
@@ -107,6 +108,18 @@ export const insertProduct = async (req, res) => {
       price,
       idCompany,
     });
+    if (idCompany == "643225d2b48bc28f4f03ac00") {
+      const { status } = await axios.post(
+        `${urlServer}/api/products/643225d2b48bc28f4f03ac00`,
+        req.body
+      );
+      if (status != 201) {
+        return res.status(HTTP_STATUS.OK).json({
+          status: "error",
+          message: `Error al crear producto`,
+        });
+      }
+    }
     // Guardar producto en la base de datos
     await productData.save();
     res
